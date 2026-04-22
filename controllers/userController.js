@@ -252,6 +252,9 @@ export const deleteUser = async (req, res, next) => {
     if (!user) {
         return next(new ErrorHandler("user does not found by id", 401))
     }
+    if (user._id.toString() === req.user.id.toString()) {
+        return next(new ErrorHandler("You cannot delete yourself!", 400));
+    }
     // remove avatar ?
     await user.deleteOne()
     res.status(200).json({

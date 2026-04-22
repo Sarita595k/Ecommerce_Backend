@@ -12,6 +12,13 @@ import { handleError } from "./middlewares/errors.js"
 // import db 
 import connectToDb from "./config/database.js"
 
+import cors from 'cors';
+
+// Add this before your routes
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true
+}));
 // for json parsing 
 app.use(express.json())
 
