@@ -75,7 +75,7 @@ export const updatePassword = async (req, res, next) => {
     const user = await User.findById(req.user.id).select('+password')
 
     // check previous user password 
-    const isMatched = bcrypt.compare(req.body.oldPassword, req.body.password)
+    const isMatched = await bcrypt.compare(req.body.oldPassword, req.body.password)
     if (!isMatched) {
         return next(new ErrorHandler("old password is incoorect", 400))
     }

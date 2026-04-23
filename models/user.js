@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
     name: {
         type: String,
         required: [true, "Please enter your name"],
-        maxLength: [30, "Your name cann't exceed 30 characters"]
+        maxLength: [30, "Your name can't exceed 30 characters"]
     },
     email: {
         type: String,
@@ -22,11 +22,11 @@ const userSchema = new mongoose.Schema({
     avatar: {
         public_id: {
             type: String,
-            required: true,
+            // required: true,
         },
         url: {
             type: String,
-            required: true
+            // required: true
         }
     },
     role: {
