@@ -11,13 +11,13 @@ router.get('/', getProducts)
 router.get('/:id', getSingleProduct)
 
 // router for adding new product
-router.post('/admin/new', isAuthenticated, authorizedRole('admin'), newProduct)
+router.post('/seller/new', isAuthenticated, authorizedRole('seller'), newProduct)
 
 // router for updating product
-router.put('/admin/:id', isAuthenticated, authorizedRole('admin'), updateProduct)
+router.put('/seller/:id', isAuthenticated, authorizedRole('seller'), updateProduct)
 
 // router for deleting product
-router.delete('/admin/:id', isAuthenticated, authorizedRole('admin'), deleteProduct)
+router.delete('/seller/:id', isAuthenticated, authorizedRole('seller'), deleteProduct)
 export default router
 
 // end of code

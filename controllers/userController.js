@@ -72,20 +72,20 @@ export const loginUser = async (req, res, next) => {
 
 // update passoword  /api/user/update/password
 export const updatePassword = async (req, res, next) => {
-    const user = await User.findById(req.user.id).select('+password')
 
-    // check previous user password 
-    const isMatched = await bcrypt.compare(req.body.oldPassword, req.body.password)
+    const user = await User.findById(req.user.id).select('+password');
+
+    const isMatched = await bcrypt.compare(req.body.oldPassword, user.password);
     if (!isMatched) {
-        return next(new ErrorHandler("old password is incoorect", 400))
+        return next(new ErrorHandler("Old password is incorrect", 400));
     }
 
+    // Set the hash manually
+    user.password = await bcrypt.hash(req.body.password, 10);
+    await user.save();
 
-    user.password = await bcrypt.hash(req.body.password, 10)
-    await user.save()
-
-    sendToken(user, 200, res)
-}
+    sendToken(user, 200, res);
+};
 // forgot password /api/user/password/forgot
 export const forgotPassword = async (req, res, next) => {
     const user = await User.findOne({ email: req.body.email })
@@ -196,9 +196,9 @@ export const logoutUser = async (req, res, next) => {
     })
 }
 
-// admin routes 
+// seller routes 
 
-// get all users api/admin/users
+// get all users api/seller/users
 
 export const getAllUsers = async (req, res, next) => {
     const users = await User.find()
@@ -209,7 +209,7 @@ export const getAllUsers = async (req, res, next) => {
     })
 }
 
-// get users details /api/admin/user/:id
+// get users details /api/seller/user/:id
 
 export const getUserDetails = async (req, res, next) => {
     const user = await User.findById(req.params.id)
@@ -223,15 +223,15 @@ export const getUserDetails = async (req, res, next) => {
     })
 }
 
-// update user /api/user/admin/user/update/:id
-export const adminUpdateProfile = async (req, res, next) => {
+// update user /api/user/seller/user/update/:id
+export const sellerUpdateProfile = async (req, res, next) => {
     const newUserData = {
         name: req.body.name,
         email: req.body.email,
         role: req.body.role
     }
 
-    // update avatar /api/user/admin/user/update/:id
+    // update avatar /api/user/seller/user/update/:id
 
     const user = await User.findByIdAndUpdate(req.params.id, newUserData, {
         new: true,
@@ -245,7 +245,7 @@ export const adminUpdateProfile = async (req, res, next) => {
     })
 }
 
-// delete the user /api/user/admin/delete/:id
+// delete the user /api/user/seller/delete/:id
 export const deleteUser = async (req, res, next) => {
     const user = await User.findById(req.params.id)
 

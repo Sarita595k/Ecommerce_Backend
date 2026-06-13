@@ -88,7 +88,7 @@ export const updateProduct = async (req, res, next) => {
     }
 }
 
-// delete product api/product/admin/:id
+// delete product api/product/seller/:id
 
 export const deleteProduct = async (req, res, next) => {
     try {

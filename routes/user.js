@@ -1,5 +1,5 @@
 import express from "express"
-import { adminUpdateProfile, deleteUser, forgotPassword, getAllUsers, getUserDetails, getUserProfile, loginUser, logoutUser, registerUser, resetPassword, updatePassword, updateProfile } from "../controllers/userController.js"
+import { deleteUser, forgotPassword, getAllUsers, getUserDetails, getUserProfile, loginUser, logoutUser, registerUser, resetPassword, sellerUpdateProfile, updatePassword, updateProfile } from "../controllers/userController.js"
 import { authorizedRole, isAuthenticated } from "../middlewares/auth.js"
 const routes = express.Router()
 
@@ -27,18 +27,18 @@ routes.put("/me/update/profile", isAuthenticated, updateProfile)
 // route for logout
 routes.get("/logout", logoutUser)
 
-// route for admin 
+// route for seller 
 
 // to get all users
-routes.get("/admin/users", isAuthenticated, authorizedRole('admin'), getAllUsers)
+routes.get("/seller/users", isAuthenticated, authorizedRole('seller'), getAllUsers)
 
 // to get a specific user
-routes.get("/admin/user/:id", isAuthenticated, authorizedRole('admin'), getUserDetails)
+routes.get("/seller/user/:id", isAuthenticated, authorizedRole('seller'), getUserDetails)
 
-// to update user by admin
-routes.put("/admin/user/update/:id", isAuthenticated, authorizedRole('admin'), adminUpdateProfile)
+// to update user by seller
+routes.put("/seller/user/update/:id", isAuthenticated, authorizedRole('seller'), sellerUpdateProfile)
 
 // to delete user by id
-routes.delete("/admin/user/delete/:id", isAuthenticated, authorizedRole('admin'), deleteUser)
+routes.delete("/seller/user/delete/:id", isAuthenticated, authorizedRole('seller'), deleteUser)
 
 export default routes
