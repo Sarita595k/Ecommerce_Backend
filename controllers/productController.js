@@ -19,14 +19,17 @@ export const newProduct = async (req, res, next) => {
 export const getProducts = async (req, res, next) => {
 
     const resPerPage = 6;
+    const productCount = await Product.countDocuments();
 
-    // used in frontend to check how many products are there
-    const productCount = await Product.countDocuments()
-
+    // 1. Initialize features up to filtering
     const apiFeatures = new ApiFeatures(Product.find(), req.query)
         .search()
-        .filter()
-        .pagination(resPerPage)
+        .filter();
+
+    // 2. MODIFICATION: Only paginate if the client hasn't requested to bypass it
+    if (req.query.bypassPagination !== 'true') {
+        apiFeatures.pagination(resPerPage);
+    }
 
     const products = await apiFeatures.query;
 
@@ -36,9 +39,8 @@ export const getProducts = async (req, res, next) => {
         productsCount: productCount,
         resPerPage,
         products
-    })
-}
-
+    });
+};
 // get single product details  api/products/:id
 
 export const getSingleProduct = async (req, res, next) => {
@@ -111,3 +113,22 @@ export const deleteProduct = async (req, res, next) => {
     }
 }
 // end of code
+
+// Get all products belonging to the logged-in seller -> /api/seller/products
+export const getSellerProducts = async (req, res, next) => {
+    try {
+        // Find ONLY products created by this specific seller
+        const products = await Product.find({ user: req.user.id });
+
+        res.status(200).json({
+            success: true,
+            count: products.length,
+            products
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Failed to fetch seller inventory"
+        });
+    }
+};
